@@ -175,6 +175,10 @@ class _NewsFormPageState extends State<NewsFormPage> {
                                       children: [
                                         Text('Judul: $_title'),
                                         // TODO: Munculkan value-value lainnya
+                                        Text('Isi: $_content'),
+                                        Text('Kategori: ${_category[0].toUpperCase() + _category.substring(1)}'),
+                                        Text('URL Thumbnail: ${_thumbnail.isEmpty ? '-' : _thumbnail}'),
+                                        Text('Unggulan: ${_isFeatured ? 'Ya' : 'Tidak'}'),
                                       ],
                                     ),
                                   ),
@@ -183,13 +187,13 @@ class _NewsFormPageState extends State<NewsFormPage> {
                                       child: const Text('OK'),
                                       onPressed: () {
                                         Navigator.pop(context);
+                                        _formKey.currentState!.reset();
                                       },
                                     ),
                                   ],
                                 );
                               },
                             );
-                            _formKey.currentState!.reset();
                           }
                         },
                         child: const Text(
