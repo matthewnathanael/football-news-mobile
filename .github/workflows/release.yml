@@ -68,7 +68,7 @@ jobs:
       - name: Generate unique tag
         id: tag
         run: echo "::set-output name=tag::v${{ steps.version.outputs.version }}-$(date +'%Y%m%d%H%M%S')"
-
+          
       - name: Release APK
         uses: ncipollo/release-action@v1
         with:
@@ -78,3 +78,12 @@ jobs:
           name: "v${{ steps.version.outputs.version }} - ${{ steps.date.outputs.date }}"
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ steps.tag.outputs.tag }}
+      - name: Set up signing keys
+        run: |
+          echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 --decode > release-keystore.jks
+      - name: Build and sign APK
+        run: flutter build apk --release \
+          --keystore=release-keystore.jks \
+          --keystore-password="${{ secrets.KEYSTORE_PASSWORD }}" \
+          --key-alias="${{ secrets.KEY_ALIAS }}" \
+          --key-password="${{ secrets.KEY_PASSWORD }}"  
